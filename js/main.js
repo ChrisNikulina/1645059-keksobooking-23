@@ -25,7 +25,7 @@ const getSomeNumber = function (min, max, numeral) {
     [min,max] = [max,min];
   }
 
-  return parseFloat(Math.random() * (max - min +1) + min).toFixed(numeral);
+  return parseFloat((Math.random() * (max - min +1) + min).toFixed(numeral));
 };
 
 getSomeNumber(0,500);
