@@ -61,6 +61,7 @@ const OFFER_PHOTOS = [
 ];
 
 const OBJECT_COUNT = 10;
+let userNo = 1;
 
 const Lat = {
   MIN: 35.65000,
@@ -80,10 +81,10 @@ const getRandomArrayElement = (elements) => {
 
 const addAuthor = (authorNumber) => {
   if (authorNumber < 10) {
-    authorNumber =   '0{ authorNumber}';
+    authorNumber =   `0${ authorNumber}`;
   }
   return {
-    avatar: '/img/avatars/user{authorNumber}.png',
+    avatar: `img/avatars/user${authorNumber}.png`,
   };
 };
 
@@ -115,13 +116,13 @@ const addLocation = () => {
   };
 };
 
-const AddCreate = () => ({
-  author: addAuthor(),
+const AddCreate = (authorNumber) => ({
+  author: addAuthor(authorNumber),
   offer: addOffer(),
   location: addLocation(),
 });
 
-const similarAdd = new Array(OBJECT_COUNT).fill(null).map(() => AddCreate());
+const similarAdd = new Array(OBJECT_COUNT).fill(null).map(() => AddCreate(userNo++));
 
 
 console.log (similarAdd);
