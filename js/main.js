@@ -88,22 +88,29 @@ const addAuthor = (authorNumber) => {
   };
 };
 
-const addOffer = () => {
-  const randomOfferFeaturesIndex = getSomeIntegerNumber(0, OFFER_FEATURES.length - 1);
-  const randomOfferPhotosIndex = getSomeIntegerNumber(0, OFFER_PHOTOS.length - 1);
+const shuffle = (a) => {
+  for (let i = a.length -1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+};
 
+const addOffer = () => {
+  const randomLocationLat = getSomeNumber(Lat.MIN, Lat.MAX, Lat.NUMERAL);
+  const randomLocationLng = getSomeNumber(Lng.MIN, Lng.MAX, Lng.NUMERAL);
   return {
     title: 'Самоё уютное и комфортное жильё',
-    adress: [getSomeNumber(Lat.MIN, Lat.MAX, Lat.NUMERAL)] + [getSomeNumber(Lng.MIN, Lng.MAX, Lng.NUMERAL)],
+    address: `${randomLocationLat}, ${randomLocationLng}`,
     price: getSomeIntegerNumber(1,50000),
     type: getRandomArrayElement(OFFER_TYPES),
     rooms: getSomeIntegerNumber(1, 30),
     guests: getSomeIntegerNumber(1, 20),
     checkin: getRandomArrayElement(OFFER_TIMES),
     checkout: getRandomArrayElement(OFFER_TIMES),
-    features: OFFER_FEATURES.slice(0, randomOfferFeaturesIndex),
+    features: shuffle(OFFER_FEATURES).slice(getSomeIntegerNumber(0, OFFER_FEATURES.length - 1)),
     description: 'Здесь Вы будете чувствовать себя как дома!',
-    photos: OFFER_PHOTOS.slice(0, randomOfferPhotosIndex),
+    photos: shuffle(OFFER_PHOTOS).slice(getSomeIntegerNumber(0, OFFER_PHOTOS.length - 1)),
   };
 };
 
@@ -111,8 +118,8 @@ const addLocation = () => {
   const randomLocationLat = getSomeNumber(Lat.MIN, Lat.MAX, Lat.NUMERAL);
   const randomLocationLng = getSomeNumber(Lng.MIN, Lng.MAX, Lng.NUMERAL);
   return {
-    Lat: randomLocationLat,
-    Lng: randomLocationLng,
+    lat: randomLocationLat,
+    lng: randomLocationLng,
   };
 };
 
