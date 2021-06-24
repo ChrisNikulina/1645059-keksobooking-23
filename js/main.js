@@ -12,7 +12,6 @@ const getSomeIntegerNumber = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-getSomeIntegerNumber(0,500);
 
 //Функция, возвращающая случайное число с плавающей точкой из переданного диапазона включительно.
 
@@ -28,7 +27,6 @@ const getSomeNumber = function (min, max, numeral) {
   return parseFloat((Math.random() * (max - min +1) + min).toFixed(numeral));
 };
 
-getSomeNumber(0,500);
 
 // eslint-disable-next-line no-unused-vars
 const OFFER_TYPES = [
@@ -61,7 +59,6 @@ const OFFER_PHOTOS = [
 ];
 
 const OBJECT_COUNT = 10;
-let userNo = 1;
 
 const Lat = {
   MIN: 35.65000,
@@ -75,20 +72,12 @@ const Lng = {
   NUMERAL: 5,
 };
 
-const getRandomArrayElement = (elements) => {
-  return elements[getSomeIntegerNumber(0, elements.length - 1)];
-};
 
-const addAuthor = (authorNumber) => {
-  if (authorNumber < 10) {
-    authorNumber =   `0${ authorNumber}`;
-  }
-  return {
-    avatar: `img/avatars/user${authorNumber}.png`,
-  };
-};
+const addAuthor = (authorNumber) => ({
+  avatar: `img/avatars/user${ (authorNumber < 10) ? `0${ authorNumber}` : `${ authorNumber}`}.png`,
+});
 
-const shuffle = (a) => {
+const shuffleBlocks = (a) => {
   for (let i = a.length -1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [a[i], a[j]] = [a[j], a[i]];
@@ -103,14 +92,14 @@ const addOffer = () => {
     title: 'Самоё уютное и комфортное жильё',
     address: `${randomLocationLat}, ${randomLocationLng}`,
     price: getSomeIntegerNumber(1,50000),
-    type: getRandomArrayElement(OFFER_TYPES),
+    type: OFFER_TYPES[getSomeIntegerNumber(0, OFFER_TYPES.length - 1)],
     rooms: getSomeIntegerNumber(1, 30),
     guests: getSomeIntegerNumber(1, 20),
-    checkin: getRandomArrayElement(OFFER_TIMES),
-    checkout: getRandomArrayElement(OFFER_TIMES),
-    features: shuffle(OFFER_FEATURES).slice(getSomeIntegerNumber(0, OFFER_FEATURES.length - 1)),
+    checkin: OFFER_TIMES[getSomeIntegerNumber(0, OFFER_TIMES.length - 1)],
+    checkout: OFFER_TIMES[getSomeIntegerNumber(0, OFFER_TIMES.length - 1)],
+    features: shuffleBlocks(OFFER_FEATURES).slice(getSomeIntegerNumber(0, OFFER_FEATURES.length)),
     description: 'Здесь Вы будете чувствовать себя как дома!',
-    photos: shuffle(OFFER_PHOTOS).slice(getSomeIntegerNumber(0, OFFER_PHOTOS.length - 1)),
+    photos: shuffleBlocks(OFFER_PHOTOS).slice(getSomeIntegerNumber(0, OFFER_PHOTOS.length - 1)),
   };
 };
 
@@ -123,14 +112,13 @@ const addLocation = () => {
   };
 };
 
-const AddCreate = (authorNumber) => ({
+const addCreate = (authorNumber) => ({
   author: addAuthor(authorNumber),
   offer: addOffer(),
   location: addLocation(),
 });
 
-const similarAdd = new Array(OBJECT_COUNT).fill(null).map(() => AddCreate(userNo++));
+const similarAddOffers = new Array(OBJECT_COUNT).fill(null).map((el, index) => addCreate(index + 1));
 
-
-console.log (similarAdd);
+console.log(similarAddOffers);
 
