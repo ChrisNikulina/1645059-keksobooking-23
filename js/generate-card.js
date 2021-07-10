@@ -75,15 +75,12 @@ const generateCard = ({offer, author}) => {
 
   const photos = addElement.querySelector('.popup__photos');
   if(offer.photos) {
-    const photoElement = photos.querySelector('.popup__photo');
-    const photoFragment = document.createDocumentFragment();
-    offer.photos .map((photo) => {
-      const newPhoto = photoElement.cloneNode(true);
-      newPhoto.src = photo;
-      photoFragment.appendChild(newPhoto);
-    });
+    const photoElement = photos.querySelector('img');
     photos.innerHTML = '';
-    photos.appendChild(photoFragment);
+    offer.photos.forEach((photo) => {
+      photoElement.src = photo;
+      photos.appendChild(photoElement);
+    });
   } else {
     photos.remove();
   }

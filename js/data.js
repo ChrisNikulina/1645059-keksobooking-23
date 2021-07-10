@@ -84,6 +84,4 @@ const addCreate = (authorNumber) => ({
 
 const similarAddOffers = () => new Array(OBJECT_COUNT).fill(null).map((el, index) => addCreate(index + 1));
 
-similarAddOffers;
-
 export {similarAddOffers};
