@@ -7,20 +7,30 @@ const MIN_PRICE = {
 };
 
 const ROOMS_CAPACITY = {
-  1 : ['1'],
-  2: ['1', '2'],
-  3: ['1', '2', '3'],
-  100: ['0'],
+  1 : {
+    guests: ['1'],
+    errorText: 'В 1 комнате может быть только 1 гость',
+  },
+  2: {
+    guests: ['1', '2'],
+    errorText: 'В 2 комнатах может быть только 1 или 2 гостя',
+  },
+  3: {
+    guests: ['1', '2', '3'],
+    errorText: 'В 3 комнатах могут быть только 1, 2 или 3 гостя',
+  },
+  100: {
+    guests: ['0'],
+    errorText: '100 комнат не для гостей',
+  },
 };
 
 
 const adForm = document.querySelector('.ad-form');
 const price = adForm.querySelector('#price');
 const typeOfApartament = adForm.querySelector('#type');
-const capacityOfGuests = document.querySelector('#capacity');
+const capacity = document.querySelector('#capacity');
 const roomNumber = adForm.querySelector('#room_number');
-const options = capacityOfGuests.querySelectorAll('option');
-let roomOptions;
 
 
 const checkTypeOfApartament = () => {
@@ -37,28 +47,22 @@ typeOfApartament.addEventListener('change', () => {
   price.placeholder = MIN_PRICE[typeValue];
 });
 
-const capacityChangeValidity =  () => {
-  roomOptions = ROOMS_CAPACITY[roomNumber.value];
-  if (roomOptions.indexOf(capacityOfGuests.value) === -1) {
-    capacityOfGuests.setCustomValidity('Количество гостей в выбранную комнату не подходит');
-  } else {
-    capacityOfGuests.setCustomValidity('');
-  }
+
+const validateRoomsNumbers = () => {
+  const roomsSelect = document.querySelector('[name="rooms"]');
+  const rooms = roomsSelect.value;
+  const guests = document.querySelector('[name="capacity"]').value;
+
+  roomsSelect.setCustomValidity(ROOMS_CAPACITY[rooms].guests.includes(guests) ? '' : ROOMS_CAPACITY[rooms].errorText);
 };
 
-const roomNumbersChange = () => {
-  roomOptions = ROOMS_CAPACITY[roomNumber.value];
-  options.forEach((option) => {
-    if(roomOptions.indexOf(option.value) === -1) {
-      option.setAttribute('hidden', '');
-    } else {
-      option.removeAttribute('hidden');
-    }
-  });
-  capacityChangeValidity();
+const onRoomNumberChange = () => {
+  validateRoomsNumbers();
 };
 
+const onCapacityChange = () => {
+  validateRoomsNumbers();
+};
 
-roomNumber.addEventListener('change',  roomNumbersChange);
-capacityOfGuests.addEventListener('change', capacityChangeValidity);
-
+roomNumber.addEventListener('change', onRoomNumberChange);
+capacity.addEventListener('change', onCapacityChange);
