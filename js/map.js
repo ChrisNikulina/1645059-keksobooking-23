@@ -41,7 +41,7 @@ const defaultAddress = mainPinMarker.getLatLng();
 address.value = `${defaultAddress.lat}, ${defaultAddress.lng}`;
 
 mainPinMarker.on('moveend', (evt) => {
-  const newAddress = evt.terget.getLatLng();
+  const newAddress = evt.target.getLatLng();
   address.value = `${ newAddress.lat.toFixed(5)}, ${newAddress.lng.toFixed(5)}`;
 });
 
