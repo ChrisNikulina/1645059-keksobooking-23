@@ -31,6 +31,14 @@ const price = adForm.querySelector('#price');
 const typeOfApartament = adForm.querySelector('#type');
 const capacity = document.querySelector('#capacity');
 const roomNumber = adForm.querySelector('#room_number');
+const adFormTime = adForm.querySelector('.ad-form__element--time');
+const timeIn = adFormTime.querySelector('#timein');
+const timeOut = adFormTime.querySelector('#timeout');
+
+adFormTime.addEventListener('change', (evt) => {
+  timeIn.value = evt.target.value;
+  timeOut.value = evt.target.value;
+});
 
 
 const checkTypeOfApartament = () => {
