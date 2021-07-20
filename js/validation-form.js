@@ -1,3 +1,7 @@
+import {sendData} from './api.js';
+import{setSuccessMessage, setErrorMessage} from './submit-form.js';
+import{setPrimalAddress} from './map.js';
+
 const MIN_PRICE = {
   bungalow: 0,
   flat: 1000,
@@ -34,12 +38,34 @@ const roomNumber = adForm.querySelector('#room_number');
 const adFormTime = adForm.querySelector('.ad-form__element--time');
 const timeIn = adFormTime.querySelector('#timein');
 const timeOut = adFormTime.querySelector('#timeout');
+const resetButton = document.querySelector('.ad-form__reset');
+
 
 adFormTime.addEventListener('change', (evt) => {
   timeIn.value = evt.target.value;
   timeOut.value = evt.target.value;
 });
 
+resetButton.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  adForm.reset();
+  setPrimalAddress();
+});
+
+const setFormSubmit = () => {
+  adForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    sendData( () => {
+      adForm.reset();
+      setPrimalAddress();
+      setSuccessMessage();
+    },
+    () => setErrorMessage(),
+    new FormData(evt.target),
+    );
+  });
+};
 
 const checkTypeOfApartament = () => {
   const priceMin = MIN_PRICE[typeOfApartament.value];
@@ -74,3 +100,5 @@ const onCapacityChange = () => {
 
 roomNumber.addEventListener('change', onRoomNumberChange);
 capacity.addEventListener('change', onCapacityChange);
+
+export{setFormSubmit};

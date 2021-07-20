@@ -1,13 +1,10 @@
 import {generateCard} from  './generate-card.js';
-import {similarAddOffers} from './data.js';
 import {setInactiveState, setActiveState} from './form.js';
 
-const showCards = similarAddOffers(10);
 
 setInactiveState();
 
 const address = document.querySelector('#address');
-const resetButton = document.querySelector('.ad-form__reset');
 
 const COORDINATES_DEFAULT = {
   lat: 35.68272,
@@ -37,39 +34,50 @@ const mainPinMarker = L.marker(COORDINATES_DEFAULT, {
 });
 mainPinMarker.addTo(map);
 
-const defaultAddress = mainPinMarker.getLatLng();
-address.value = `${defaultAddress.lat}, ${defaultAddress.lng}`;
+const defaultAddress = (lat, lng) => address.value = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+defaultAddress(COORDINATES_DEFAULT.lat, COORDINATES_DEFAULT.lng);
 
 mainPinMarker.on('moveend', (evt) => {
-  const newAddress = evt.target.getLatLng();
-  address.value = `${ newAddress.lat.toFixed(5)}, ${newAddress.lng.toFixed(5)}`;
+  const {lat, lng} = evt.target.getLatLng();
+  defaultAddress(lat, lng);
 });
 
-resetButton.addEventListener('click', () => {
-  mainPinMarker.getLatLng(COORDINATES_DEFAULT);
-  address.value = `${defaultAddress.lat}, ${defaultAddress.lng}`;
-  map.setView(COORDINATES_DEFAULT,10);
-});
-
-
-showCards.forEach((point) => {
-  const {location : {lat, lng} } = point;
-  const icon = L.icon({
-    iconUrl: 'img/main-pin.svg',
-    iconSize: [40, 40],
-    iconAnchor: [20, 40],
+const setPrimalAddress = () => {
+  const {lat, lng} = COORDINATES_DEFAULT;
+  mainPinMarker.setLatLng({
+    lat,
+    lng,
   });
-  const marker = L.marker(
-    {
-      lat,
-      lng,
-    },
-    {
-      icon,
-    },
-  );
+  map.setView({
+    lat,
+    lng,
+  }, 10);
+  defaultAddress(lat, lng);
+};
 
-  marker.addTo(map).bindPopup(generateCard(point), {
-    keepInView: true,
+const createMarker = (showCards) => {
+  showCards.forEach((point) => {
+    const {location : {lat, lng} } = point;
+    const icon = L.icon({
+      iconUrl: 'img/main-pin.svg',
+      iconSize: [40, 40],
+      iconAnchor: [20, 40],
+    });
+    const marker = L.marker(
+      {
+        lat,
+        lng,
+      },
+      {
+        icon,
+      },
+    );
+
+    marker.addTo(map).bindPopup(generateCard(point), {
+      keepInView: true,
+    });
   });
-});
+};
+
+export{setPrimalAddress, createMarker};
+
