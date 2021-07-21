@@ -1,4 +1,4 @@
-import {sendData} from './api.js';
+import {inquiry} from './api.js';
 import{setSuccessMessage, setErrorMessage} from './submit-form.js';
 import{setPrimalAddress} from './map.js';
 
@@ -56,12 +56,13 @@ const setFormSubmit = () => {
   adForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
-    sendData( () => {
+    inquiry(() => {
       adForm.reset();
       setPrimalAddress();
       setSuccessMessage();
     },
     () => setErrorMessage(),
+    'POST',
     new FormData(evt.target),
     );
   });

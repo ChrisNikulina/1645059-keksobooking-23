@@ -1,10 +1,16 @@
 import {generateCard} from  './generate-card.js';
 import {setInactiveState, setActiveState} from './form.js';
-
+import {getPublicationSort} from './filters.js';
+import {debounce} from './debounce.js';
 
 setInactiveState();
 
+let offers = [];
+
 const address = document.querySelector('#address');
+const mapFilters = document.querySelector('.map__filters');
+const OBJECT_COUNT = 10;
+const RENDER_DELAY = 500;
 
 const COORDINATES_DEFAULT = {
   lat: 35.68272,
@@ -55,8 +61,10 @@ const setPrimalAddress = () => {
   defaultAddress(lat, lng);
 };
 
+const markersGroup = L.layerGroup().addTo(map);
+
 const createMarker = (showCards) => {
-  showCards.forEach((point) => {
+  showCards.slice(0, OBJECT_COUNT).forEach((point) => {
     const {location : {lat, lng} } = point;
     const icon = L.icon({
       iconUrl: 'img/main-pin.svg',
@@ -73,11 +81,26 @@ const createMarker = (showCards) => {
       },
     );
 
-    marker.addTo(map).bindPopup(generateCard(point), {
+    marker.addTo(markersGroup).bindPopup(generateCard(point), {
       keepInView: true,
     });
   });
 };
 
-export{setPrimalAddress, createMarker};
+const onMapFiltersChange = () => {
+  markersGroup.clearLayers();
+  createMarker(getPublicationSort(offers));
+};
+
+const changeDebounceProcess = debounce(() => onMapFiltersChange(), RENDER_DELAY);
+
+const onSuccess = (data) => {
+  setActiveState();
+  offers = data.slice();
+  createMarker(offers.slice(0, 10));
+  mapFilters.addEventListener('change', changeDebounceProcess);
+};
+
+
+export{setPrimalAddress, onSuccess};
 

@@ -1,30 +1,27 @@
-const getData = (onSuccess, onError) => {
-  fetch(' https://23.javascript.pages.academy/keksobooking/data').then((response) => {
-    if(response.ok) {
-      return response.json();
-    }
-  }).then((json) => {
-    onSuccess(json);
-  }).catch(() => {
-    onError('Ошибка загрузки.');
-  });
+const Urls = {
+  GET: ' https://23.javascript.pages.academy/keksobooking/data',
+  POST: 'https://23.javascript.pages.academy/keksobooking',
 };
 
-const sendData = (onSuccess, onError, body) => {
-  fetch('https://23.javascript.pages.academy/keksobooking',
+
+const inquiry = (onSuccess, onError, method, body) => {
+  fetch(
+    Urls[method],
     {
-      method: 'POST',
+      method,
       body,
     },
   ).then((response) => {
     if(response.ok) {
-      onSuccess();
-    } else {
-      onError;
+      response.json().then((data) => {
+        onSuccess(data);
+      });
+    }  else {
+      onError('Произошла ошибка загрузки данных');
     }
   }).catch(() => {
-    onError();
+    onError('Произошла ошибка загрузки данных');
   });
 };
 
-export{getData, sendData};
+export{inquiry};
