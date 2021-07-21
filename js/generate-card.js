@@ -4,7 +4,7 @@ const types = {
   flat: 'Квартира',
   bungalow: 'Бунгало',
   house: 'Дом',
-  palase: 'Дворец',
+  palace: 'Дворец',
   hotel: 'Отель',
 };
 

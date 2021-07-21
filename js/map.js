@@ -17,6 +17,18 @@ const COORDINATES_DEFAULT = {
   lng: 139.75871,
 };
 
+const mainPin = {
+  url: 'img/main-pin.svg',
+  size: [52, 52],
+  anchor: [26, 52],
+};
+
+const pointPin = {
+  url: 'img/pin.svg',
+  size: [40, 40],
+  anchor: [20, 40],
+};
+
 const map = L.map('map-canvas').on('load', () => {
   setActiveState();
 }).setView(COORDINATES_DEFAULT, 10);
@@ -29,10 +41,11 @@ L.tileLayer(
 ).addTo(map);
 
 const mainPinIcon = L.icon({
-  iconUrl: '/img/main-pin.svg',
-  iconSize: [52, 52],
-  iconAnchor: [26, 52],
+  iconUrl: mainPin.url,
+  iconSize: mainPin.size,
+  iconAnchor: mainPin.anchor,
 });
+
 
 const mainPinMarker = L.marker(COORDINATES_DEFAULT, {
   draggable: true,
@@ -67,9 +80,9 @@ const createMarker = (showCards) => {
   showCards.slice(0, OBJECT_COUNT).forEach((point) => {
     const {location : {lat, lng} } = point;
     const icon = L.icon({
-      iconUrl: 'img/main-pin.svg',
-      iconSize: [40, 40],
-      iconAnchor: [20, 40],
+      iconUrl: pointPin.url,
+      iconSize: pointPin.size,
+      iconAnchor: pointPin.anchor,
     });
     const marker = L.marker(
       {
@@ -87,14 +100,14 @@ const createMarker = (showCards) => {
   });
 };
 
-const onMapFiltersChange = () => {
+const setMapFiltersChange = () => {
   markersGroup.clearLayers();
   createMarker(getPublicationSort(offers));
 };
 
-const changeDebounceProcess = debounce(() => onMapFiltersChange(), RENDER_DELAY);
+const changeDebounceProcess = debounce(() => setMapFiltersChange(), RENDER_DELAY);
 
-const onSuccess = (data) => {
+const setSuccess = (data) => {
   setActiveState();
   offers = data.slice();
   createMarker(offers.slice(0, 10));
@@ -102,5 +115,5 @@ const onSuccess = (data) => {
 };
 
 
-export{setPrimalAddress, onSuccess};
+export{setPrimalAddress, setSuccess};
 

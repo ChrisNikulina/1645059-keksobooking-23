@@ -1,20 +1,20 @@
 const PriceFilterValue = {
-  CHIP: {
+  'LOW': {
     MIN: 0,
     MAX: 10000,
   },
-  MIDDLE: {
+  'MIDDLE': {
     MIN: 10000,
     MAX: 50000,
   },
-  HIGH: {
+  'HIGH': {
     MIN: 50000,
-    MAX: 100000,
+    MAX: 1000000,
   },
 };
 
 const MAX_COUNT = 10;
-const DEAULT_VALUE = 'any';
+const DEFAULT_VALUE = 'any';
 
 const mapFilters = Array.from(document.querySelector('.map__filters').children);
 
@@ -38,7 +38,7 @@ const getPublicationSort = (data) => {
   const offers = [];
 
   while (i< data.length && offers.length < MAX_COUNT) {
-    output = mapFilters.every((filter) => (filter.value === DEAULT_VALUE) ? true : filters[filter.id](data[i], filter));
+    output = mapFilters.every((filter) => (filter.value === DEFAULT_VALUE) ? true : filters[filter.id](data[i], filter));
     if(output) {
       offers.push(data[i]);
     }

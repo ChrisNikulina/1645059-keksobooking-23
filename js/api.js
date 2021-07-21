@@ -17,10 +17,10 @@ const inquiry = (onSuccess, onError, method, body) => {
         onSuccess(data);
       });
     }  else {
-      onError('Произошла ошибка загрузки данных');
+      onError('Произошла ошибка загрузки данных.');
     }
   }).catch(() => {
-    onError('Произошла ошибка загрузки данных');
+    onError('Произошла ошибка загрузки данных.');
   });
 };
 
